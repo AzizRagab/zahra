@@ -1,0 +1,283 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ZAHRA - Command Center</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <!-- WebGL Canvas Background (Three.js matrix point cloud) -->
+    <canvas id="bg-canvas"></canvas>
+
+    <!-- Main Container -->
+    <div class="container">
+        <!-- Login Form -->
+        <div id="login-form" class="form-container active">
+            <div class="logo">
+                <span class="logo-mark">Z</span>
+                <h1 class="logo-text">ZAHRA</h1>
+            </div>
+            <h2 class="form-title">Operator Sign-In</h2>
+            <p class="form-subtitle">Agentic Penetration Testing Platform — Authorized Engagements Only</p>
+
+            <form onsubmit="handleLogin(event)">
+                <div class="input-group">
+                    <label for="login-email">Email</label>
+                    <input type="email" id="login-email" required placeholder="operator@zahra.local">
+                </div>
+                <div class="input-group">
+                    <label for="login-password">Password</label>
+                    <input type="password" id="login-password" required placeholder="••••••••">
+                </div>
+                <button type="submit" class="btn-primary">
+                    <span class="btn-text">Sign In</span>
+                    <span class="btn-glow"></span>
+                </button>
+            </form>
+
+            <p class="form-footer">
+                New operator? <a href="#" onclick="showSignup()">Create an account</a>
+            </p>
+            <p class="form-note">Local session only — no data leaves this host except calls to your configured LLM backend.</p>
+        </div>
+
+        <!-- Signup Form -->
+        <div id="signup-form" class="form-container">
+            <div class="logo">
+                <span class="logo-mark">Z</span>
+                <h1 class="logo-text">ZAHRA</h1>
+            </div>
+            <h2 class="form-title">Create Operator Account</h2>
+            <p class="form-subtitle">Agentic Pentest Platform — Authorized Personnel Only</p>
+
+            <form onsubmit="handleSignup(event)">
+                <div class="input-group">
+                    <label for="signup-name">Full Name</label>
+                    <input type="text" id="signup-name" required placeholder="Operator Name">
+                </div>
+                <div class="input-group">
+                    <label for="signup-email">Email</label>
+                    <input type="email" id="signup-email" required placeholder="operator@zahra.local">
+                </div>
+                <div class="input-group">
+                    <label for="signup-password">Password</label>
+                    <input type="password" id="signup-password" required placeholder="••••••••">
+                </div>
+                <div class="input-group">
+                    <label for="signup-confirm">Confirm Password</label>
+                    <input type="password" id="signup-confirm" required placeholder="••••••••">
+                </div>
+                <button type="submit" class="btn-primary">
+                    <span class="btn-text">Create Account</span>
+                    <span class="btn-glow"></span>
+                </button>
+            </form>
+
+            <p class="form-footer">
+                Already have an account? <a href="#" onclick="showLogin()">Sign in</a>
+            </p>
+        </div>
+
+        <!-- Command Center Dashboard (Hidden initially) -->
+        <div id="dashboard" class="dashboard hidden">
+            <!-- Header -->
+            <header class="command-header">
+                <div class="header-left">
+                    <div class="logo">
+                        <span class="logo-mark">Z</span>
+                        <h1 class="logo-text">ZAHRA</h1>
+                    </div>
+                    <div class="system-status">
+                        <span class="status-dot online"></span>
+                        <span class="status-text">System Online</span>
+                    </div>
+                    <div class="system-status model-status" id="modelStatus" title="LLM backend">
+                        <span class="status-dot" id="modelStatusDot"></span>
+                        <span class="status-text" id="modelStatusText">Model: checking…</span>
+                    </div>
+                </div>
+                <div class="header-right">
+                    <span class="operator-name">Operator: <span id="operatorName">Guest</span></span>
+                    <button class="btn-logout" onclick="logout()">Logout</button>
+                </div>
+            </header>
+
+            <main class="command-content">
+                <!-- Live Cards Row -->
+                <div class="live-cards-row">
+                    <div class="live-card">
+                        <div class="card-header">
+                            <span class="card-icon">🔍</span>
+                            <h3>Web Search Agent</h3>
+                        </div>
+                        <div class="card-body">
+                            <span class="status-badge ready">Ready</span>
+                            <p class="last-search" id="lastSearch">No recent searches</p>
+                        </div>
+                    </div>
+
+                    <div class="live-card">
+                        <div class="card-header">
+                            <span class="card-icon">🤖</span>
+                            <h3>Swarm Agents</h3>
+                        </div>
+                        <div class="card-body">
+                            <span class="status-badge active" id="activeAgents">5 Active</span>
+                            <p class="card-metric">All systems operational</p>
+                        </div>
+                    </div>
+
+                    <div class="live-card">
+                        <div class="card-header">
+                            <span class="card-icon">🎯</span>
+                            <h3>Recon Agent</h3>
+                        </div>
+                        <div class="card-body">
+                            <span class="status-badge ready">Ready</span>
+                            <p class="card-metric">Idle</p>
+                        </div>
+                    </div>
+
+                    <div class="live-card">
+                        <div class="card-header">
+                            <span class="card-icon">📡</span>
+                            <h3>Scan Agent</h3>
+                        </div>
+                        <div class="card-body">
+                            <span class="status-badge ready">Ready</span>
+                            <p class="card-metric">Idle</p>
+                        </div>
+                    </div>
+
+                    <div class="live-card">
+                        <div class="card-header">
+                            <span class="card-icon">💥</span>
+                            <h3>Exploit Agent</h3>
+                        </div>
+                        <div class="card-body">
+                            <span class="status-badge ready">Ready</span>
+                            <p class="card-metric">Idle</p>
+                        </div>
+                    </div>
+
+                    <div class="live-card">
+                        <div class="card-header">
+                            <span class="card-icon">🧠</span>
+                            <h3>RAG Memory</h3>
+                        </div>
+                        <div class="card-body">
+                            <span class="status-badge active">1022 Chunks</span>
+                            <p class="card-metric">Memory Loaded</p>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Search Section -->
+                <div class="search-section">
+                    <h2 class="section-title">Live Intelligence Search</h2>
+                    <div class="search-container">
+                        <div class="search-input-wrapper">
+                            <input type="text" id="searchInput" placeholder="Enter search query..." autocomplete="off">
+                            <button class="btn-search" onclick="executeSearch()">
+                                <span>Search</span>
+                            </button>
+                            <button class="btn-deep-search" onclick="executeDeepSearch()">
+                                <span>Deep Search</span>
+                            </button>
+                        </div>
+                        <div class="search-options">
+                            <button class="btn-clear" onclick="clearResults()">Clear Results</button>
+                        </div>
+                    </div>
+
+                    <!-- Loading Indicator -->
+                    <div id="searchLoading" class="search-loading hidden">
+                        <div class="loading-spinner"></div>
+                        <p>Searching intelligence databases...</p>
+                    </div>
+
+                    <!-- Search Results -->
+                    <div id="searchResults" class="search-results"></div>
+                </div>
+
+                <!-- Activity Feed -->
+                <div class="activity-section">
+                    <h2 class="section-title">Activity Feed</h2>
+                    <div id="activityFeed" class="activity-feed">
+                        <div class="activity-item">
+                            <span class="activity-time">--:--:--</span>
+                            <span class="activity-text">System initialized. Ready for operations.</span>
+                        </div>
+                    </div>
+                </div>
+            </main>
+        </div>
+    </div>
+
+    <!-- Three.js (ESM) — green-neon matrix point cloud. Loads last so the
+         classic script.js (which guards on `typeof THREE`) never double-paints. -->
+    <script type="module">
+        import * as THREE from "https://cdn.jsdelivr.net/npm/three@0.185.1/build/three.module.js";
+        const canvas = document.getElementById("bg-canvas");
+        if (!canvas) throw new Error("bg-canvas missing");
+        const scene = new THREE.Scene();
+        const camera = new THREE.PerspectiveCamera(60, window.innerWidth / window.innerHeight, 0.1, 2000);
+        camera.position.z = 60;
+        const renderer = new THREE.WebGLRenderer({ canvas, antialias: true, alpha: true });
+        renderer.setPixelRatio(window.devicePixelRatio <= 1.5 ? window.devicePixelRatio : 1.5);
+        renderer.setClearColor(0x000000, 0);
+        const group = new THREE.Group(); scene.add(group);
+        const COUNT = 1800;
+        const geometry = new THREE.BufferGeometry();
+        const positions = new Float32Array(COUNT * 3), velocities = new Float32Array(COUNT);
+        const rng = Math.random;
+        for (let i = 0; i < COUNT; i++) {
+            positions[i*3] = (rng()-0.5)*120; positions[i*3+1] = (rng()-0.5)*70; positions[i*3+2] = rng()*40-20;
+            velocities[i] = 0.08 + rng()*0.22;
+        }
+        geometry.setAttribute("position", new THREE.BufferAttribute(positions, 3));
+        geometry.setAttribute("velocity", new THREE.BufferAttribute(velocities, 1));
+        const points = new THREE.Points(geometry, new THREE.PointsMaterial({
+            color: 0x00ff41, size: 0.28, sizeAttenuation: true, transparent: true,
+            opacity: 0.82, depthWrite: false, blending: THREE.AdditiveBlending
+        }));
+        group.add(points);
+        const onResize = () => {
+            const w = window.innerWidth, h = window.innerHeight;
+            camera.aspect = w/h; camera.updateProjectionMatrix();
+            renderer.setSize(w, h);
+        };
+        window.addEventListener("resize", onResize); onResize();
+        const clock = new THREE.Clock();
+        (function animate(){
+            requestAnimationFrame(animate);
+            const dt = clock.getDelta();
+            const p = geometry.attributes.position.array, v = geometry.attributes.velocity.array;
+            for (let i=0;i<COUNT;i++){
+                p[i*3+2] += v[i]*dt*25;
+                if (p[i*3+2] > 40){ p[i*3]=(rng()-0.5)*120; p[i*3+1]=(rng()-0.5)*70; p[i*3+2]=-20; }
+            }
+            geometry.attributes.position.needsUpdate = true;
+            points.rotation.y = clock.elapsedTime*0.02;
+            renderer.render(scene, camera);
+        })();
+        window.__matrixGL = true;
+    </script>
+    <script src="script.js"></script>
+    <script>
+        // Check if user is already authenticated on page load
+        document.addEventListener('DOMContentLoaded', () => {
+            if (localStorage.getItem('zahra-authenticated') === 'true') {
+                const loginForm = document.getElementById('login-form');
+                const signupForm = document.getElementById('signup-form');
+                const dashboard = document.getElementById('dashboard');
+                if (loginForm) loginForm.classList.remove('active');
+                if (signupForm) signupForm.classList.remove('active');
+                if (dashboard) dashboard.classList.remove('hidden');
+            }
+        });
+    </script>
+<script src="/extras.js"></script>
+</body>
+</html>

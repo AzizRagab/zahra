@@ -1,0 +1,17 @@
+20:41:00 [zahra.core.agentic_core] INFO: Registered campaign: ab757a16-8583-40f2-acb9-ede08f0558c2
+20:41:00 [zahra.core.events] INFO: Event: {'event_type': 'campaign_started', 'campaign_id': 'ab757a16-8583-40f2-acb9-ede08f0558c2', 'agent_name': '', 'finding_id': '', 'detail': 'Target: 127.0.0.1'}
+20:41:00 [zahra.core.orchestrator] INFO: created campaign ab757a16-8583-40f2-acb9-ede08f0558c2 for target '127.0.0.1'
+20:41:00 [zahra.core.events] INFO: Event: {'event_type': 'campaign_started', 'campaign_id': 'ab757a16-8583-40f2-acb9-ede08f0558c2', 'agent_name': '', 'finding_id': '', 'detail': 'Agents: scan_agent'}
+20:41:00 [zahra.agents.swarm] INFO: swarm executing campaign ab757a16-8583-40f2-acb9-ede08f0558c2 with agents: scan_agent (async)
+20:41:00 [zahra.core.events] INFO: Event: {'event_type': 'agent_started', 'campaign_id': '', 'agent_name': 'scan_agent', 'finding_id': '', 'detail': 'Starting scan_agent'}
+20:41:00 [zahra.agents.base] INFO: scan_agent starting for target: 127.0.0.1
+20:41:04 [httpx] INFO: HTTP Request: POST http://localhost:11434/v1/chat/completions "HTTP/1.1 200 OK"
+20:41:04 [zahra.agents.base] INFO: scan_agent executing: nuclei -u 127.0.0.1 -t cves (CVE scan)
+20:41:04 [zahra.core.events] INFO: Event: {'event_type': 'tool_used', 'campaign_id': '', 'agent_name': 'scan_agent', 'finding_id': '', 'detail': 'nuclei -u 127.0.0.1 -t cves'}
+20:41:10 [httpx] INFO: HTTP Request: POST http://localhost:11434/v1/chat/completions "HTTP/1.1 200 OK"
+20:41:10 [zahra.agents.base] INFO: scan_agent LLM signaled done at iteration 2: No CVEs found
+20:41:11 [zahra.core.events] INFO: Event: {'event_type': 'agent_finished', 'campaign_id': '', 'agent_name': 'scan_agent', 'finding_id': '', 'detail': 'Completed: 2 findings'}
+20:41:11 [zahra.agents.base] INFO: scan_agent finished: 2 findings
+20:41:13 [zahra.agents.swarm] INFO: scan_agent finished: 2 findings in 13.15s
+20:41:16 [zahra.core.events] INFO: Event: {'event_type': 'campaign_complete', 'campaign_id': '', 'agent_name': '', 'finding_id': '', 'detail': 'Agentic Core stopped'}
+20:41:16 [zahra.core.agentic_core] INFO: Agentic Core stopped

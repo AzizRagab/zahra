@@ -1,0 +1,9 @@
+20:48:43 [zahra.core.agentic_core] INFO: Registered campaign: e4e48b46-729f-45ad-b0d9-d0544f55e2aa
+20:48:43 [zahra.core.events] INFO: Event: {'event_type': 'campaign_started', 'campaign_id': 'e4e48b46-729f-45ad-b0d9-d0544f55e2aa', 'agent_name': '', 'finding_id': '', 'detail': 'Target: 127.0.0.1'}
+20:48:43 [zahra.core.orchestrator] INFO: created campaign e4e48b46-729f-45ad-b0d9-d0544f55e2aa for target '127.0.0.1'
+20:48:43 [zahra.core.events] INFO: Event: {'event_type': 'campaign_started', 'campaign_id': 'e4e48b46-729f-45ad-b0d9-d0544f55e2aa', 'agent_name': '', 'finding_id': '', 'detail': 'Agents: scan_agent'}
+20:48:43 [zahra.agents.swarm] INFO: swarm executing campaign e4e48b46-729f-45ad-b0d9-d0544f55e2aa with agents: scan_agent (async)
+20:48:43 [zahra.core.events] INFO: Event: {'event_type': 'agent_started', 'campaign_id': '', 'agent_name': 'scan_agent', 'finding_id': '', 'detail': 'Starting scan_agent'}
+20:48:43 [zahra.agents.base] INFO: scan_agent starting for target: 127.0.0.1
+20:48:43 [zahra.agents.base] INFO: scan_agent executing: nuclei -u http://127.0.0.1 -silent (Offline mode: performing scan.)
+20:48:43 [zahra.core.events] INFO: Event: {'event_type': 'tool_used', 'campaign_id': '', 'agent_name': 'scan_agent', 'finding_id': '', 'detail': 'nuclei -u http://127.0.0.1 -silent'}

@@ -1,0 +1,86 @@
+# ── Python (ZAHRA core) ─────────────────────────────────────────────
+__pycache__/
+*.py[cod]
+*.egg-info/
+.eggs/
+build/
+dist/
+.pytest_cache/
+.mypy_cache/
+.ruff_cache/
+.coverage
+htmlcov/
+
+# ── Virtual environments ─────────────────────────────────────────────
+.venv/
+venv/
+env/
+
+# ── ZAHRA runtime state & data (never commit) ────────────────────────
+zahra_brain.db
+zahra_brain.db-shm
+zahra_brain.db-wal
+zahra_data/
+zahra_model/
+wordlists/
+targets.txt
+zahra_scope.json
+
+# ── Database files (SQLite etc.) ─────────────────────────────────────
+*.db
+*.db-shm
+*.db-wal
+*.sqlite
+*.sqlite3
+*.sqlite-shm
+*.sqlite-wal
+*.sqlite-journal
+
+# ── Model weights / binaries ─────────────────────────────────────────
+*.safetensors
+*.bin
+*.onnx
+*.gguf
+
+# ── Logs ─────────────────────────────────────────────────────────────
+*.log
+logs/
+output.log
+server*.log
+omniroute*.log
+pentest-swarm*.log
+zahra*.log
+
+# ── Go (services/pentest-swarm) ──────────────────────────────────────
+services/pentest-swarm/bin/
+services/pentest-swarm/pentestswarm
+services/pentest-swarm/config.yaml
+!services/pentest-swarm/config.example.yaml
+*.test
+*.out
+
+# ── Node / TypeScript (services/omniroute) ───────────────────────────
+node_modules/
+.next/
+out/
+*.tsbuildinfo
+next-env.d.ts
+
+# ── Environment & secrets ────────────────────────────────────────────
+.env
+.env.*
+!.env.example
+*.pem
+*.key
+*.api-key
+
+# ── Agent / editor / OS state ────────────────────────────────────────
+.claude/
+.kilo/
+.superpowers/
+.vscode/
+.idea/
+.DS_Store
+Thumbs.db
+*.swp
+*~

@@ -1,0 +1,228 @@
+package cli
+
+import (
+	"fmt"
+	"math/rand"
+	"os"
+	"strings"
+	"time"
+
+	"github.com/spf13/cobra"
+)
+
+var demoCmd = &cobra.Command{
+	Use:   "demo",
+	Short: "Play a scripted, network-free walkthrough of the swarm (for talks / README GIFs)",
+	Long: `demo prints a fully simulated pentest campaign to the terminal. It
+does not hit the network, does not need an API key, and does not create
+any artefacts. Use it to show off the swarm in demos, conference talks,
+and the README GIF.`,
+	Example: `  pentestswarm demo
+  pentestswarm demo --target acme.corp --speed fast`,
+	RunE: runDemo,
+}
+
+func runDemo(cmd *cobra.Command, args []string) error {
+	target, _ := cmd.Flags().GetString("target")
+	speed, _ := cmd.Flags().GetString("speed")
+
+	tempo := tempoFor(speed)
+	printBanner()
+	fmt.Println()
+	fmt.Printf("  %s     %s\n", colorDim("Target:"), colorBold(target))
+	fmt.Printf("  %s      %s\n", colorDim("Scope:"), target)
+	fmt.Printf("  %s  %s\n", colorDim("Objective:"), "find all vulnerabilities")
+	fmt.Printf("  %s       %s\n", colorDim("Mode:"), "bugbounty")
+	fmt.Printf("  %s   %s\n", colorDim("Provider:"), colorCyan("claude-sonnet-4-6")+colorDim("  (demo mode — no API calls)"))
+	fmt.Printf("  %s      %s\n", colorDim("Swarm:"), colorMagenta("stigmergic blackboard ")+colorDim("(4 agents)"))
+	fmt.Println()
+	fmt.Println(colorDim("  ───────────────────────────────────────────────────────────────"))
+	fmt.Println()
+	tempo.sleep(600)
+
+	// Phase 1: Recon fan-out with spinners.
+	for _, tool := range []demoTool{
+		{"subfinder", "passive subdomain enum", 22, "subdomains"},
+		{"dnsx", "A/AAAA/CNAME resolution", 22, "records"},
+		{"httpx", "probing alive hosts", 14, "alive"},
+		{"naabu", "top-1000 port scan", 37, "ports"},
+		{"katana", "depth-3 crawl + JS", 58, "endpoints"},
+		{"nuclei", "CVE + misconfig sweep", 11, "matches"},
+	} {
+		spinProgress(tool, tempo)
+	}
+	tempo.sleep(500)
+
+	// Phase 2: Blackboard activity stream — findings appearing as the
+	// classifier + exploit agents react.
+	fmt.Println()
+	fmt.Println(colorDim("  ───────────────────────────────────────────────────────────────"))
+	fmt.Println(colorCyan("  [blackboard]") + colorDim(" live findings stream"))
+	fmt.Println(colorDim("  ───────────────────────────────────────────────────────────────"))
+	tempo.sleep(400)
+	for _, e := range demoStream {
+		printEventLine(e, tempo)
+	}
+	tempo.sleep(500)
+
+	// Phase 3: Attack plan.
+	fmt.Println()
+	fmt.Println(colorDim("  ───────────────────────────────────────────────────────────────"))
+	fmt.Println(colorMagenta("  [exploit agent]") + colorDim(" building attack chain"))
+	fmt.Println(colorDim("  ───────────────────────────────────────────────────────────────"))
+	for _, step := range []string{
+		"chain: SQLi → Data Extraction → Credential Access → Lateral Movement",
+		"step 1/4  nmap -sV api.acme.corp           " + colorGreen("✓"),
+		"step 2/4  sqlmap --batch -u ...            " + colorGreen("✓"),
+		"step 3/4  extract users table              " + colorGreen("✓"),
+		"step 4/4  test lateral smb shares          " + colorYellow("~"),
+	} {
+		fmt.Printf("  %s %s\n", colorDim(ts()), step)
+		tempo.sleep(220)
+	}
+	tempo.sleep(400)
+
+	// Phase 4: Campaign summary.
+	fmt.Println()
+	fmt.Println(colorDim("  ───────────────────────────────────────────────────────────────"))
+	fmt.Println(colorGreen("  [DONE]") + "  Campaign complete in " + colorBold("1m 47s"))
+	fmt.Println()
+	fmt.Println("    Findings      " + colorRed("1 critical") + colorDim(" · ") + colorYellow("3 high") + colorDim(" · ") + "5 medium · 2 low")
+	fmt.Println("    Overall risk  " + colorRed("HIGH"))
+	fmt.Println("    Reports       " + colorCyan("./reports/acme.corp-demo.md"))
+	fmt.Println("                  " + colorCyan("./reports/acme.corp-demo.sarif") + colorDim("  (GitHub Code Scanning)"))
+	fmt.Println("                  " + colorCyan("./reports/acme.corp-demo.html"))
+	fmt.Println()
+	fmt.Println(colorDim("  This was a simulated run. For the real thing:"))
+	fmt.Println(colorDim("    $ export PENTESTSWARM_ORCHESTRATOR_API_KEY=sk-ant-..."))
+	fmt.Println(colorDim("    $ pentestswarm scan ") + colorBold(target) + colorDim(" --scope ") + colorBold(target) + colorDim(" --swarm --follow"))
+	fmt.Println()
+	return nil
+}
+
+// --- demo data ---
+
+type demoTool struct {
+	name, detail string
+	count        int
+	unit         string
+}
+
+type demoEvent struct {
+	phase, severity, detail string
+	pauseMs                 int
+}
+
+var demoStream = []demoEvent{
+	{"recon", "", "subfinder complete — " + colorBold("22 subdomains") + " discovered", 250},
+	{"classify", "info", "fingerprinting tech stack: nginx 1.18 / node 18 / postgres 14", 250},
+	{"recon", "", "katana complete — " + colorBold("58 endpoints") + " mapped, 12 parameters flagged", 250},
+	{"exploit", "", "evaluating chain candidates against objective: " + colorDim("\"find RCE\""), 250},
+	{"!", "medium", "Missing X-Frame-Options on " + colorCyan("www.acme.corp"), 200},
+	{"!", "medium", "Outdated jQuery 1.12.4 on " + colorCyan("shop.acme.corp") + " (CVE-2020-11022)", 200},
+	{"!", "high", "Reflected XSS in " + colorCyan("/profile?name=") + " (CVSS 7.3)", 250},
+	{"exploit", "", "pheromone on xss/profile: " + colorBold("0.91") + " — queueing active scan", 200},
+	{"!", "critical", "SQL injection in " + colorCyan("/search?q=") + " (CVSS 9.8)", 350},
+	{"exploit", "", "pheromone on sqli/search: " + colorBold("1.00") + " — escalating to sqlmap", 250},
+	{"!", "high", "Exposed .git directory on " + colorCyan("dev.acme.corp"), 250},
+	{"classify", "", "classifier: 11 findings, 2 filtered as false positive", 200},
+}
+
+// --- tempo / pacing ---
+
+type demoTempo struct{ factor float64 }
+
+func tempoFor(s string) demoTempo {
+	switch s {
+	case "fast":
+		return demoTempo{factor: 0.3}
+	case "slow":
+		return demoTempo{factor: 1.5}
+	}
+	return demoTempo{factor: 1.0}
+}
+
+func (t demoTempo) sleep(ms int) {
+	time.Sleep(time.Duration(float64(ms)*t.factor) * time.Millisecond)
+}
+
+// --- spinner ---
+
+// spinProgress renders a running-tool line that updates in place with a
+// Unicode spinner and a percentage bar, then settles on the final count.
+func spinProgress(tool demoTool, tempo demoTempo) {
+	frames := []rune{'⣾', '⣽', '⣻', '⢿', '⡿', '⣟', '⣯', '⣷'}
+	steps := 18
+	for i := 0; i <= steps; i++ {
+		pct := (i * 100) / steps
+		bar := renderBar(pct, 20)
+		spinner := string(frames[i%len(frames)])
+		fmt.Printf("\r  %s %s %s  %-10s %s  %s",
+			colorDim(ts()),
+			colorYellow(spinner),
+			bar,
+			colorCyan(tool.name),
+			colorDim(tool.detail),
+			colorDim(fmt.Sprintf("%3d%%", pct)),
+		)
+		os.Stdout.Sync()
+		tempo.sleep(45 + rand.Intn(25))
+	}
+	// Final line replaces the spinner with a ✓ and the count.
+	fmt.Printf("\r  %s %s %s  %-10s %s  %s                    \n",
+		colorDim(ts()),
+		colorGreen("✓"),
+		renderBar(100, 20),
+		colorCyan(tool.name),
+		colorDim(tool.detail),
+		colorGreen(fmt.Sprintf("%d %s", tool.count, tool.unit)),
+	)
+}
+
+func renderBar(pct, width int) string {
+	filled := pct * width / 100
+	if filled > width {
+		filled = width
+	}
+	return colorGreen(strings.Repeat("█", filled)) + colorDim(strings.Repeat("░", width-filled))
+}
+
+// --- event line ---
+
+func printEventLine(e demoEvent, tempo demoTempo) {
+	t := colorDim(ts())
+	switch e.phase {
+	case "recon":
+		fmt.Printf("  %s %s %s\n", t, colorCyan("[recon]   "), e.detail)
+	case "classify":
+		fmt.Printf("  %s %s %s\n", t, colorMagenta("[classify]"), e.detail)
+	case "exploit":
+		fmt.Printf("  %s %s %s\n", t, colorYellow("[exploit] "), e.detail)
+	case "!":
+		tag := colorRed("[CRITICAL]")
+		switch e.severity {
+		case "high":
+			tag = colorYellow("[HIGH]    ")
+		case "medium":
+			tag = colorGreen("[MEDIUM]  ")
+		case "low":
+			tag = colorDim("[LOW]     ")
+		case "info":
+			tag = colorDim("[INFO]    ")
+		case "critical":
+			tag = colorRed("[CRITICAL]")
+		}
+		fmt.Printf("  %s %s %s\n", t, tag, e.detail)
+	}
+	tempo.sleep(e.pauseMs)
+}
+
+func ts() string {
+	return time.Now().Format("15:04:05")
+}
+
+func init() {
+	demoCmd.Flags().String("target", "acme.corp", "the target to simulate scanning")
+	demoCmd.Flags().String("speed", "normal", "playback speed: slow | normal | fast")
+	rootCmd.AddCommand(demoCmd)
+}

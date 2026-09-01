@@ -1,0 +1,12 @@
+20:44:43 [zahra.core.agentic_core] INFO: Registered campaign: 84e7800f-f562-4c98-abf7-caaaf2dca4ac
+20:44:43 [zahra.core.events] INFO: Event: {'event_type': 'campaign_started', 'campaign_id': '84e7800f-f562-4c98-abf7-caaaf2dca4ac', 'agent_name': '', 'finding_id': '', 'detail': 'Target: 127.0.0.1'}
+20:44:43 [zahra.core.orchestrator] INFO: created campaign 84e7800f-f562-4c98-abf7-caaaf2dca4ac for target '127.0.0.1'
+20:44:43 [zahra.core.events] INFO: Event: {'event_type': 'campaign_started', 'campaign_id': '84e7800f-f562-4c98-abf7-caaaf2dca4ac', 'agent_name': '', 'finding_id': '', 'detail': 'Agents: recon_agent, scan_agent, exploit_agent, c2_agent, mitm_agent'}
+20:44:43 [zahra.agents.swarm] INFO: swarm executing campaign 84e7800f-f562-4c98-abf7-caaaf2dca4ac with agents: recon_agent, scan_agent, exploit_agent, c2_agent, mitm_agent (async)
+20:44:43 [zahra.core.events] INFO: Event: {'event_type': 'agent_started', 'campaign_id': '84e7800f-f562-4c98-abf7-caaaf2dca4ac', 'agent_name': '', 'finding_id': '', 'detail': 'recon_agent starting'}
+20:44:43 [zahra.core.events] INFO: Event: {'event_type': 'agent_started', 'campaign_id': '', 'agent_name': 'recon_agent', 'finding_id': '', 'detail': 'Starting recon_agent'}
+20:44:43 [zahra.agents.base] INFO: recon_agent starting for target: 127.0.0.1
+20:44:43 [zahra.ai_agent.rag] INFO: RAG memory loaded: 22 entries from zahra_data\ai_agent_rag.json
+20:44:51 [httpx] INFO: HTTP Request: POST http://localhost:11434/v1/chat/completions "HTTP/1.1 200 OK"
+20:44:51 [zahra.agents.base] INFO: recon_agent executing: masscan -iL /dev/null -p 1-65535 -f -oG -t 50000 -r 10000 -d 50000 --all-ports --exclude-ports 22,80,443 --excludefile /tmp/exclude.txt 127.0.0.1 (Masscan is used to scan the entire IP range for open ports. The target is specified as 127.0.0.1)
+20:44:51 [zahra.core.events] INFO: Event: {'event_type': 'tool_used', 'campaign_id': '', 'agent_name': 'recon_agent', 'finding_id': '', 'detail': 'masscan -iL /dev/null -p 1-65535 -f -oG -t 50000 -r 10000 -d 50000 --all-ports --exclude-ports 22,80,443 --excludefile /tmp/exclude.txt 127.0.0.1'}

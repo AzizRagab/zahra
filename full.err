@@ -1,0 +1,3 @@
+usage: zahra [-h] [--log-level {DEBUG,INFO,WARNING,ERROR}]
+             {scan,recon,exploit,c2,mitm,full,status,memory,campaigns,serve,tunnel,controller,think,decide,deploy,cmd,brain} ...
+zahra: error: unrecognized arguments: 127.0.0.1

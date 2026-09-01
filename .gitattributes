@@ -1,0 +1,31 @@
+# Normalize line endings across platforms.
+* text=auto
+
+# Text files
+*.py   text
+*.go   text
+*.ts   text
+*.tsx  text
+*.js   text
+*.jsx  text
+*.sh   text
+*.ps1  text
+*.bat  text
+*.md   text
+*.yml  text
+*.yaml text
+*.json text
+*.toml text
+*.css  text
+*.html text
+
+# Binary files
+*.png  binary
+*.jpg  binary
+*.jpeg binary
+*.gif  binary
+*.svg  binary
+*.ico  binary
+*.exe  binary
+*.db   binary
+*.sqlite3 binary
