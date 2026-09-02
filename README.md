@@ -2,14 +2,79 @@
 
 <div align="center">
 
+![ZAHRA](https://readme-typing-svg.demolab.com?font=Fira+Code&size=40&duration=3000&pause=1000&color=FF4500&width=600&height=60&lines=%F0%9F%90%89+ZAHRA+%7C+Agentic+Pentest+System+%F0%9F%90%89)
+
 ![Version](https://img.shields.io/badge/version-2.0.0-blue)
 ![Python](https://img.shields.io/badge/python-3.9%2B-green)
 ![License](https://img.shields.io/badge/license-MIT-red)
 ![Status](https://img.shields.io/badge/status-active-success)
+![Build](https://img.shields.io/badge/build-passing-brightgreen)
+![Tests](https://img.shields.io/badge/tests-128%2B%20passing-blue)
 
 **AI-Powered Penetration Testing Swarm Platform**
 
-[Features](#-features) • [Installation](#-installation) • [Usage](#-usage) • [Architecture](#-architecture) • [Documentation](#-documentation)
+<a href="https://github.com/AzizRagab/zahra/releases">
+  <img src="https://img.shields.io/github/v/release/AzizRagab/zahra?style=for-the-badge&label=Releases&color=brightgreen" alt="Releases">
+</a>
+<a href="https://github.com/AzizRagab/zahra/blob/main/LICENSE">
+  <img src="https://img.shields.io/github/license/AzizRagab/zahra?style=for-the-badge&label=License&color=blue" alt="License">
+</a>
+
+<p align="center">
+  <a href="#features">Features</a> •
+  <a href="#installation">Installation</a> •
+  <a href="#usage">Usage</a> •
+  <a href="#architecture">Architecture</a> •
+  <a href="#documentation">Documentation</a> •
+  <a href="#contributing">Contributing</a> •
+  <a href="#license">License</a>
+</p>
+
+ </div>
+
+---
+
+## 🚀 Live Demo
+
+<div align="center">
+
+![ZAHRA Demo](https://readme-typing-svg.demolab.com?font=Fira+Code&size=20&duration=2500&pause=800&color=00FA9A&width=800&height=30&lines=Recon+%E2%86%92+Vuln+Scanning+%E2%86%92+Exploitation+%E2%86%92+C2+%E2%86%92+Reporting+%7C+AI-Powered+%7C+Swarm+Agents+%7C+Adaptive+RAG)
+
+*Watch ZAHRA's agentic swarm in action — Recon → Scan → Exploit → Report*
+
+</div>
+
+---
+
+## ⚡ Quick Start
+
+<div align="center">
+
+![Quick Start](https://readme-typing-svg.demolab.com?font=Fira+Code&size=22&duration=4000&pause=1200&color=FF6B6B&width=800&height=35&lines=git+clone+https%3A%2F%2Fgithub.com%2FAzizRagab%2Fzahra.git%20%7C%20pip+install+-r+requirements.txt%20%7C%20python+main.py+status)
+
+</div>
+
+```bash
+# 1. Clone & Install
+git clone https://github.com/AzizRagab/zahra.git
+cd zahra
+pip install -r requirements.txt
+
+# 2. Run a pentest in one command
+python main.py full 10.2.20.31
+
+# 3. Start the web dashboard
+python main.py serve --port 8080
+
+# 4. Monitor in real-time via browser
+#    Open: http://localhost:8080
+```
+
+<div align="center">
+
+| CLI | API | Web UI | C2 | MITM | Full | Dashboard |
+|---|---|---|---|---|---|---|
+| `python main.py recon target.com` | `python main.py scan 192.168.1.1` | `python main.py exploit target.com` | `python main.py c2 10.0.0.5` | `python main.py mitm 10.0.0.1` | `python main.py full target.com` | `python main.py serve --port 8080` |
 
 </div>
 
